@@ -5,8 +5,9 @@
  */
 int BlockDetector::findBlackBlock(Mat &img)
 {
+    m_image = img.clone();
     cvtColor(img, m_grayImage, COLOR_BGR2GRAY);
-    // auto t0 = getTickCount();
+    auto t0 = getTickCount();
 
     // 提取轮廓线
     dilate(m_grayImage, m_grayImage, m_kernel, Point(-1, -1), 2); // 图像膨胀消去网格线并分离分块
@@ -40,19 +41,19 @@ int BlockDetector::findBlackBlock(Mat &img)
         m_pressedColumn = -1;
     }
 
-    //std::cout << "运行时间为：" << (getTickCount() - t0) / getTickFrequency() << std::endl;
+    std::cout << "运行时间为：" << (getTickCount() - t0) / getTickFrequency() << std::endl;
     return m_pressedColumn;
 }
 
 /* 绘制黑块轮廓线，红色边框包围的是应该被点击的黑块 */
 void BlockDetector::drawBlackBlockContours()
 {
-    Mat dst = m_grayImage.clone();
+    Mat dst = m_image.clone();
 
     // 绘制轮廓线
     for (int i = 0; i < m_nBlacks; ++i)
     {
-        Scalar color(i == m_pressedContourIndex ? 0 : 255, 0, 255);
+        Scalar color(0, i == m_pressedContourIndex ? 0 : 255, 255);
         drawContours(dst, m_contours, i, color, 2, LINE_AA);
     }
 

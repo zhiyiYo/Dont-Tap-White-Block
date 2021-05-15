@@ -7,7 +7,7 @@ int main()
     char *a = new char[4];
     Serial mySerial;
 
-    if (!mySerial.initPort(3, 9600, 8, 1, 0))
+    if (!mySerial.initPort(5, 9600, 8, 1, 0))
     {
         cout << "Open COM wrong!" << endl;
     }
