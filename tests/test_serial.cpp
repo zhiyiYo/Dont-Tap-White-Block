@@ -5,21 +5,22 @@ using namespace std;
 int main()
 {
     char *a = new char[4];
-    SerialCom mySerial;
+    Serial mySerial;
 
     if (!mySerial.initPort(3, 9600, 8, 1, 0))
     {
-        cout << "打开串口错误" << endl;
+        cout << "Open COM wrong!" << endl;
     }
     if (!mySerial.openThread())
     {
-        cout << "创建线程错误";
+        cout << "Open thread wrong!";
     }
-    a[0] = '1';
+    a[0] = '0';
     a[1] = 'A';
     a[2] = 'B';
     a[3] = 'C';
-    cout << "发送数据：" << mySerial.writeData(a, 4) << endl;
+    cout << "Send data: " << (mySerial.writeData(a, 4) ? "Successful" : "Fail") << endl;
     system("pause");
+    cout << endl;
     return 0;
 }

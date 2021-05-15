@@ -3,14 +3,15 @@
 #include <tchar.h>
 #include <string>
 
-class SerialCom
+class Serial
 {
 public:
-    SerialCom(void);
-    ~SerialCom(void);
+    Serial(void);
+    ~Serial(void);
 
     bool initPort(UINT port, UINT baudRate, UINT byteSize, BYTE stopBits, BYTE parity);
     bool writeData(char *data, int len);
+    bool readOneData(char &data);
     bool openThread();
     bool closeThread();
 

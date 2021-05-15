@@ -1,19 +1,21 @@
+#include <iostream>
 #include "Serial.h"
+using namespace std;
 
-SerialCom::SerialCom(void)
+Serial::Serial(void)
 {
     hComm = INVALID_HANDLE_VALUE;
     hThread = INVALID_HANDLE_VALUE;
     threadExit_flag = false;
 }
 
-SerialCom::~SerialCom(void)
+Serial::~Serial(void)
 {
     closePort();
     closeThread();
 }
 
-bool SerialCom::initPort(UINT port, UINT baudRate, UINT byteSize, BYTE stopBits, BYTE parity)
+bool Serial::initPort(UINT port, UINT baudRate, UINT byteSize, BYTE stopBits, BYTE parity)
 {
     TCHAR portName[10];
     wsprintf(portName, _T("COM%d"), port);
@@ -25,9 +27,9 @@ bool SerialCom::initPort(UINT port, UINT baudRate, UINT byteSize, BYTE stopBits,
     COMMTIMEOUTS Timeout;
     Timeout.ReadIntervalTimeout = 0;
     Timeout.ReadTotalTimeoutMultiplier = 0;
-    Timeout.ReadTotalTimeoutConstant = 0;
+    Timeout.ReadTotalTimeoutConstant = 2000;
     Timeout.WriteTotalTimeoutMultiplier = 0;
-    Timeout.WriteTotalTimeoutConstant = 0;
+    Timeout.WriteTotalTimeoutConstant = 2000;
     SetCommTimeouts(hComm, &Timeout);
 
     DCB dcb;
@@ -62,19 +64,21 @@ bool SerialCom::initPort(UINT port, UINT baudRate, UINT byteSize, BYTE stopBits,
     {
         return false;
     }
+    SetCommMask(hComm, EV_RXCHAR);
+    SetupComm(hComm, 1024, 1024);
 
     PurgeComm(hComm, PURGE_RXCLEAR | PURGE_TXCLEAR | PURGE_RXABORT | PURGE_TXABORT);
     return true;
 }
 
-bool SerialCom::openPort(TCHAR *portName)
+bool Serial::openPort(TCHAR *portName)
 {
     hComm = CreateFile(portName,
                        GENERIC_READ | GENERIC_WRITE,
                        0,
                        NULL,
                        OPEN_EXISTING,
-                       FILE_FLAG_OVERLAPPED,
+                       0,
                        NULL);
     if (hComm == INVALID_HANDLE_VALUE)
     {
@@ -83,7 +87,7 @@ bool SerialCom::openPort(TCHAR *portName)
     return true;
 }
 
-bool SerialCom::closePort()
+bool Serial::closePort()
 {
     if (hComm != INVALID_HANDLE_VALUE)
     {
@@ -95,7 +99,7 @@ bool SerialCom::closePort()
         return false;
 }
 
-bool SerialCom::openThread()
+bool Serial::openThread()
 {
     hThread = (HANDLE)_beginthreadex(NULL, 0, serialThread, this, 0, NULL);
     if (!hThread)
@@ -105,7 +109,7 @@ bool SerialCom::openThread()
     return true;
 }
 
-bool SerialCom::closeThread()
+bool Serial::closeThread()
 {
     if (hThread != INVALID_HANDLE_VALUE)
     {
@@ -118,23 +122,43 @@ bool SerialCom::closeThread()
     return false;
 }
 
-UINT WINAPI SerialCom::serialThread(void *pParam)
+UINT WINAPI Serial::serialThread(void *pParam)
 {
-    SerialCom *pSerialCom = (SerialCom *)pParam;
-    char buf[512];
+    Serial *pSerial = (Serial *)pParam;
+
+    char buf[50];
     DWORD readNum;
-    while (!pSerialCom->threadExit_flag)
+    while (!pSerial->threadExit_flag)
     {
-        bool readSuc = ReadFile(pSerialCom->hComm, buf, 512, &readNum, NULL);
-        if (readSuc && readNum > 0)
+        UINT dataInCOM = 0;
+        DWORD error;
+        COMSTAT comstat;
+        memset(&comstat, 0, sizeof(COMSTAT));
+        if (ClearCommError(pSerial->hComm, &error, &comstat))
+            dataInCOM = comstat.cbInQue;
+
+        //cout << "test:thread " << dataInCOM << endl;
+        string receive = "";
+        while (dataInCOM > 0)
         {
-            buf[readNum] = '\0';
+            char dataRead;
+            if (pSerial->readOneData(dataRead) == true)
+            {
+                receive += dataRead;
+                //cout << "One data: " << dataRead << endl;
+            }
+            //cout << "The number of data in COM: " << dataInCOM << endl;
+            dataInCOM--;
+            if (dataInCOM == 0)
+            {
+                cout << "Received data in COM: " << receive << endl;
+            }
         }
     }
     return 0;
 }
 
-bool SerialCom::writeData(char *data, int len)
+bool Serial::writeData(char *data, int len)
 {
     if (hComm == INVALID_HANDLE_VALUE)
     {
@@ -146,6 +170,24 @@ bool SerialCom::writeData(char *data, int len)
     if (!writeSuc)
     {
         PurgeComm(hComm, PURGE_RXCLEAR | PURGE_TXCLEAR | PURGE_RXABORT);
+        return false;
+    }
+    return true;
+}
+
+bool Serial::readOneData(char &data)
+{
+    bool readSuc = false;
+    DWORD readNum = 0;
+    if (hComm == INVALID_HANDLE_VALUE)
+    {
+        return false;
+    }
+    readSuc = ReadFile(hComm, &data, 1, &readNum, NULL);
+    if (!readSuc)
+    {
+        PurgeComm(hComm, PURGE_RXCLEAR | PURGE_RXABORT);
+        cout << "Read one data error!" << endl;
         return false;
     }
     return true;
