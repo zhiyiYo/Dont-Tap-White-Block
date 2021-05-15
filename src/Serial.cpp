@@ -2,6 +2,8 @@
 #include "Serial.h"
 using namespace std;
 
+/** @brief 构造函数，初始化句柄
+ */
 Serial::Serial(void)
 {
     hComm = INVALID_HANDLE_VALUE;
@@ -9,12 +11,22 @@ Serial::Serial(void)
     threadExit_flag = false;
 }
 
+/** @brief 析构函数，释放串口/线程句柄
+ */
 Serial::~Serial(void)
 {
     closePort();
     closeThread();
 }
 
+/** @brief 初始化串口，返回是否成功
+ * @param port 串口号
+ * @param baudRate 波特率
+ * @param byteSize 数据位数
+ * @param stopBits 停止位数
+ * @param parity 校验位，0-无校验；1-奇校验；2-偶校验
+ * @return 初始化串口是否成功
+ */
 bool Serial::initPort(UINT port, UINT baudRate, UINT byteSize, BYTE stopBits, BYTE parity)
 {
     TCHAR portName[10];
@@ -71,6 +83,10 @@ bool Serial::initPort(UINT port, UINT baudRate, UINT byteSize, BYTE stopBits, BY
     return true;
 }
 
+/** @brief 打开串口，成功返回true，否则false
+ * @param portName 串口名称，例："COM1"
+ * @return 打开串口是否成功
+ */
 bool Serial::openPort(TCHAR *portName)
 {
     hComm = CreateFile(portName,
@@ -87,6 +103,9 @@ bool Serial::openPort(TCHAR *portName)
     return true;
 }
 
+/** @brief 关闭串口
+ * @return 关闭串口是否成功
+ */
 bool Serial::closePort()
 {
     if (hComm != INVALID_HANDLE_VALUE)
@@ -99,6 +118,9 @@ bool Serial::closePort()
         return false;
 }
 
+/** @brief 打开线程，开始监听串口是否接受到数据，并打印到终端
+ * @return 打开线程是否成功
+ */
 bool Serial::openThread()
 {
     hThread = (HANDLE)_beginthreadex(NULL, 0, serialThread, this, 0, NULL);
@@ -109,6 +131,9 @@ bool Serial::openThread()
     return true;
 }
 
+/** @brief 关闭线程
+ * @return 关闭线程是否成功
+ */
 bool Serial::closeThread()
 {
     if (hThread != INVALID_HANDLE_VALUE)
@@ -122,6 +147,9 @@ bool Serial::closeThread()
     return false;
 }
 
+/** @brief 线程函数，监听串口信息并打印出
+ * @param pParam
+ */
 UINT WINAPI Serial::serialThread(void *pParam)
 {
     Serial *pSerial = (Serial *)pParam;
@@ -158,6 +186,11 @@ UINT WINAPI Serial::serialThread(void *pParam)
     return 0;
 }
 
+/** @brief 向串口发送数据
+ * @param data 需要发送数据-字符数组
+ * @param len 字符数组长度
+ * @return 发送成功返回true
+ */
 bool Serial::writeData(char *data, int len)
 {
     if (hComm == INVALID_HANDLE_VALUE)
@@ -175,6 +208,10 @@ bool Serial::writeData(char *data, int len)
     return true;
 }
 
+/** @brief 接受一个串口数据
+ * @param data 接收的数据
+ * @return 接受成功返回true
+ */
 bool Serial::readOneData(char &data)
 {
     bool readSuc = false;
