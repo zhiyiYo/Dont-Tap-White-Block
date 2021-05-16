@@ -1,6 +1,5 @@
 #include <iostream>
 #include "Serial.h"
-using namespace std;
 
 /** @brief 构造函数，初始化句柄
  */
@@ -165,21 +164,21 @@ UINT WINAPI Serial::serialThread(void *pParam)
         if (ClearCommError(pSerial->hComm, &error, &comstat))
             dataInCOM = comstat.cbInQue;
 
-        //cout << "test:thread " << dataInCOM << endl;
-        string receive = "";
+        //std::cout << "test:thread " << dataInCOM << std::endl;
+        std::string receive = "";
         while (dataInCOM > 0)
         {
             char dataRead;
             if (pSerial->readOneData(dataRead) == true)
             {
                 receive += dataRead;
-                //cout << "One data: " << dataRead << endl;
+                //std::cout << "One data: " << dataRead << std::endl;
             }
-            //cout << "The number of data in COM: " << dataInCOM << endl;
+            //std::cout << "The number of data in COM: " << dataInCOM << std::endl;
             dataInCOM--;
             if (dataInCOM == 0)
             {
-                cout << "Received data in COM: " << receive << endl;
+                std::cout << "Received data in COM: " << receive << std::endl;
             }
         }
     }
@@ -224,7 +223,7 @@ bool Serial::readOneData(char &data)
     if (!readSuc)
     {
         PurgeComm(hComm, PURGE_RXCLEAR | PURGE_RXABORT);
-        cout << "Read one data error!" << endl;
+        std::cout << "Read one data error!" << std::endl;
         return false;
     }
     return true;

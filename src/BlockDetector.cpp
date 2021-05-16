@@ -1,13 +1,13 @@
 #include "BlockDetector.h"
 
-/** @brief 返回应该被点击的列 0 ~ 3，如果没有找到返回 -1
+/** @brief 在输入图像中寻找应该被点击的黑块所在的列
  * @param img 输入图像
+ * @return 应该被点击的列，取值 0 ~ 3，如果没有找到返回 -1
  */
 int BlockDetector::findBlackBlock(Mat &img)
 {
-    m_image = img.clone();
     cvtColor(img, m_grayImage, COLOR_BGR2GRAY);
-    auto t0 = getTickCount();
+    //auto t0 = getTickCount();
 
     // 提取轮廓线
     dilate(m_grayImage, m_grayImage, m_kernel, Point(-1, -1), 2); // 图像膨胀消去网格线并分离分块
@@ -41,14 +41,15 @@ int BlockDetector::findBlackBlock(Mat &img)
         m_pressedColumn = -1;
     }
 
-    std::cout << "运行时间为：" << (getTickCount() - t0) / getTickFrequency() << std::endl;
+    // std::cout << "运行时间为：" << (getTickCount() - t0) / getTickFrequency() << std::endl;
     return m_pressedColumn;
 }
 
 /* 绘制黑块轮廓线，红色边框包围的是应该被点击的黑块 */
 void BlockDetector::drawBlackBlockContours()
 {
-    Mat dst = m_image.clone();
+    Mat dst = m_grayImage.clone();
+    cvtColor(dst, dst, COLOR_GRAY2BGR);
 
     // 绘制轮廓线
     for (int i = 0; i < m_nBlacks; ++i)
