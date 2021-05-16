@@ -4,7 +4,7 @@ using namespace std;
 
 int main()
 {
-    char *a = new char[4];
+    char a[] = "0ABC";
     Serial mySerial;
 
     if (!mySerial.initPort(5, 9600, 8, 1, 0))
@@ -15,10 +15,6 @@ int main()
     {
         cout << "Open thread wrong!";
     }
-    a[0] = '0';
-    a[1] = 'A';
-    a[2] = 'B';
-    a[3] = 'C';
     cout << "Send data: " << (mySerial.writeData(a, 4) ? "Successful" : "Fail") << endl;
     system("pause");
     cout << endl;

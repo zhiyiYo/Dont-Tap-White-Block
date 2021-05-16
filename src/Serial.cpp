@@ -3,7 +3,7 @@
 
 /** @brief 构造函数，初始化句柄
  */
-Serial::Serial(void)
+Serial::Serial()
 {
     hComm = INVALID_HANDLE_VALUE;
     hThread = INVALID_HANDLE_VALUE;
@@ -12,7 +12,7 @@ Serial::Serial(void)
 
 /** @brief 析构函数，释放串口/线程句柄
  */
-Serial::~Serial(void)
+Serial::~Serial()
 {
     closePort();
     closeThread();

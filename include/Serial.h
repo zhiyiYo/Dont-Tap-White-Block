@@ -8,8 +8,8 @@
 class Serial
 {
 public:
-    Serial(void);
-    ~Serial(void);
+    Serial();
+    ~Serial();
 
     bool initPort(UINT port, UINT baudRate, UINT byteSize, BYTE stopBits, BYTE parity);
     bool writeData(char *data, int len);

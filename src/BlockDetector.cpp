@@ -1,4 +1,5 @@
 #include "BlockDetector.h"
+using cv::Mat;
 
 /** @brief 在输入图像中寻找应该被点击的黑块所在的列
  * @param img 输入图像
@@ -6,14 +7,14 @@
  */
 int BlockDetector::findBlackBlock(Mat &img)
 {
-    cvtColor(img, m_grayImage, COLOR_BGR2GRAY);
+    cvtColor(img, m_grayImage, cv::COLOR_BGR2GRAY);
     //auto t0 = getTickCount();
 
     // 提取轮廓线
-    dilate(m_grayImage, m_grayImage, m_kernel, Point(-1, -1), 2); // 图像膨胀消去网格线并分离分块
-    m_grayImage = m_grayImage > 80;                               // 图像阈值化消去已点击过的灰色方块
-    Canny(m_grayImage, m_edge, 10, 30);                           // Canny 算法进行边缘提取
-    findContours(m_edge, m_contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+    cv::dilate(m_grayImage, m_grayImage, m_kernel, cv::Point(-1, -1), 2); // 图像膨胀消去网格线并分离分块
+    m_grayImage = m_grayImage > 80;                                       // 图像阈值化消去已点击过的灰色方块
+    cv::Canny(m_grayImage, m_edge, 10, 30);                               // Canny 算法进行边缘提取
+    cv::findContours(m_edge, m_contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
 
     // 获取图像中的黑块个数
     m_nBlacks = m_contours.size();
@@ -25,7 +26,7 @@ int BlockDetector::findBlackBlock(Mat &img)
         for (int i = 0; i < m_nBlacks; ++i)
         {
             // 创建最小斜矩形
-            RotatedRect rect = minAreaRect(m_contours[i]);
+            cv::RotatedRect rect = cv::minAreaRect(m_contours[i]);
             if (rect.center.y >= yMax)
             {
                 yMax = rect.center.y;
@@ -49,18 +50,18 @@ int BlockDetector::findBlackBlock(Mat &img)
 void BlockDetector::drawBlackBlockContours()
 {
     Mat dst = m_grayImage.clone();
-    cvtColor(dst, dst, COLOR_GRAY2BGR);
+    cv::cvtColor(dst, dst, cv::COLOR_GRAY2BGR);
 
     // 绘制轮廓线
     for (int i = 0; i < m_nBlacks; ++i)
     {
-        Scalar color(0, i == m_pressedContourIndex ? 0 : 255, 255);
-        drawContours(dst, m_contours, i, color, 2, LINE_AA);
+        cv::Scalar color(0, i == m_pressedContourIndex ? 0 : 255, 255);
+        cv::drawContours(dst, m_contours, i, color, 2, cv::LINE_AA);
     }
 
     // 显示图像
-    imshow("Detect result", dst);
-    waitKey(0);
+    cv::imshow("Detect result", dst);
+    cv::waitKey(0);
 }
 
 /* 返回黑块个数 */

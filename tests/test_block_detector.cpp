@@ -13,19 +13,14 @@ int main(int argc, char const *argv[])
         "resource/images/2.png",
         "resource/images/3.png"};
 
-    vector<Mat> images(imPaths.size());
+    cv::Mat image;
     BlockDetector detector;
 
-    for (int i = 0; i < images.size(); ++i)
+    for (int i = 0; i < imPaths.size(); ++i)
     {
-        images[i] = imread(imPaths[i]);
+        image = cv::imread(imPaths[i]);
+        assertEqual<int>(i-1, detector.findBlackBlock(image));
     }
-
-    assertEqual<int>(-1, detector.findBlackBlock(images[0]));
-    assertEqual<int>(0, detector.findBlackBlock(images[1]));
-    assertEqual<int>(1, detector.findBlackBlock(images[2]));
-    assertEqual<int>(2, detector.findBlackBlock(images[3]));
-    assertEqual<int>(3, detector.findBlackBlock(images[4]));
 
     detector.drawBlackBlockContours();
 
