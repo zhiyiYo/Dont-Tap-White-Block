@@ -164,18 +164,16 @@ UINT WINAPI Serial::serialThread(void *pParam)
         if (ClearCommError(pSerial->hComm, &error, &comstat))
             dataInCOM = comstat.cbInQue;
 
-        //std::cout << "test:thread " << dataInCOM << std::endl;
+        // std::cout << "test:thread " << dataInCOM << std::endl;
         std::string receive = "";
         while (dataInCOM > 0)
         {
             char dataRead;
-            if (pSerial->readOneData(dataRead) == true)
+            if (pSerial->readOneData(dataRead))
             {
                 receive += dataRead;
-                //std::cout << "One data: " << dataRead << std::endl;
+                dataInCOM--;
             }
-            //std::cout << "The number of data in COM: " << dataInCOM << std::endl;
-            dataInCOM--;
             if (dataInCOM == 0)
             {
                 std::cout << "Received data in COM: " << receive << std::endl;

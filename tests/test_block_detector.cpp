@@ -22,6 +22,7 @@ int main(int argc, char const *argv[])
         assertEqual<int>(i-1, detector.findBlackBlock(image));
     }
 
+    // 绘制轮廓线
     detector.drawBlackBlockContours();
 
     return 0;
