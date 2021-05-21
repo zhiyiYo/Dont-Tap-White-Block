@@ -16,7 +16,7 @@ int main(int argc, char const *argv[])
     cv::Mat image;
     BlockDetector detector;
 
-    for (int i = 0; i < imPaths.size(); ++i)
+    for (size_t i = 0; i < imPaths.size(); ++i)
     {
         image = cv::imread(imPaths[i]);
         assertEqual<int>(i-1, detector.findBlackBlock(image));

@@ -56,6 +56,60 @@
         },
         {
             "type": "process",
+            "label": "test screenshot",
+            "command": "make",
+            "args": ["test_screenshot"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            // 运行生成任务
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "测试截屏功能"
+        },
+        {
+            "type": "process",
+            "label": "test IOUtils",
+            "command": "make",
+            "args": ["test_io_utils"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            // 运行生成任务
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "测试按键检测和模拟鼠标点击功能"
+        },
+        {
+            "type": "process",
+            "label": "test game",
+            "command": "make",
+            "args": ["test_game"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            // 运行生成任务
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "测试别踩白块游戏"
+        },
+        {
+            "type": "process",
             "label": "clean",
             "command": "make",
             "args": [
