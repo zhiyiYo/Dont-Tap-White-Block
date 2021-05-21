@@ -1,0 +1,78 @@
+{
+    "tasks": [
+        {
+            "type": "process",
+            "label": "test serial",
+            "command": "make",
+            "args": ["test_serial"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            // 运行生成任务
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "测试串口"
+        },
+        {
+            "type": "process",
+            "label": "test block detector",
+            "command": "make",
+            "args": ["test_block_detector"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            // 运行生成任务
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "测试黑块探测器"
+        },
+        {
+            "type": "process",
+            "label": "test motor",
+            "command": "make",
+            "args": ["test_motor"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            // 运行生成任务
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "测试电机转动"
+        },
+        {
+            "type": "process",
+            "label": "clean",
+            "command": "make",
+            "args": [
+                "clean"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "detail": "清理中间文件"
+        },
+    ],
+    "version": "2.0.0"
+}
