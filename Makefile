@@ -52,4 +52,4 @@ test_game.o: IOUtils.h BlockDetector.h Screenshot.h
 
 .PHONY: clean
 clean:
-	del $(serial_obj) $(block_detector_obj) $(motor_obj) $(screenshot_obj) $(io_utils_obj)
+	del $(serial_obj) $(block_detector_obj) $(motor_obj) $(screenshot_obj) $(io_utils_obj) $(game_obj)
