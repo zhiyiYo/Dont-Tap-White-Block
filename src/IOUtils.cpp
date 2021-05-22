@@ -1,4 +1,4 @@
-#include"IOUtils.h"
+#include "IOUtils.h"
 
 /* 获取按下的键，没有按下的键则返回空字符 */
 char getPressedKey()
@@ -10,7 +10,7 @@ char getPressedKey()
  * @param x 坐标 x
  * @param y 坐标 y
  */
-void mouseEvent(int x, int y)
+void mouseClick(int x, int y)
 {
     SetCursorPos(x, y);
     mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);

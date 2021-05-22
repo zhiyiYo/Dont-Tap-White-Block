@@ -110,6 +110,50 @@
         },
         {
             "type": "process",
+            "label": "opencv",
+            "command": "g++",
+            "args": [
+                "-std=c++17",
+                "-Wall",
+                "${relativeFile}",
+                "-o",
+                "${fileDirname}/build/${fileBasenameNoExtension}.exe",
+                "-I",
+                "D:/OpenCV/opencv/build/include", //此处输入opencv所在build/include文件夹，用于编译时导入对应库文件
+                "-L",
+                "D:/OpenCV/opencv/build/x64/MinGW/bin", //此处输入opencv所在build/x64/MinGW/bin文件夹，用于编译时导入相应dll文件
+                "-l",
+                "libopencv_calib3d450", //根据build/x64/MinGW/bin文件夹内dll文件名自行填入或修改下列配置
+                "-llibopencv_core450",
+                "-llibopencv_dnn450",
+                "-llibopencv_features2d450",
+                "-llibopencv_flann450",
+                "-llibopencv_gapi450",
+                "-llibopencv_highgui450",
+                "-llibopencv_imgcodecs450",
+                "-llibopencv_imgproc450",
+                "-llibopencv_ml450",
+                "-llibopencv_objdetect450",
+                "-llibopencv_photo450",
+                "-llibopencv_stitching450",
+                "-llibopencv_video450",
+                "-llibopencv_videoio450",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            // 运行生成任务
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "测试别踩白块游戏"
+        },
+        {
+            "type": "process",
             "label": "clean",
             "command": "make",
             "args": [

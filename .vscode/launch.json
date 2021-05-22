@@ -5,6 +5,27 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "test game (Launch)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/${fileBasenameNoExtension}.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "D:/MinGW/mingw64/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "test game",
+        },
+        {
             "name": "test block detector (Launch)", // 配置名称，将会在启动配置的下拉菜单中显示
             "type": "cppdbg", // 配置类型，这里只能为cppdbg
             "request": "launch", // 请求配置类型，可以为launch（启动）或attach（附加）
@@ -110,7 +131,7 @@
             "preLaunchTask": "test IOUtils",
         },
         {
-            "name": "test game (Launch)",
+            "name": "opencv (Launch)",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/${fileBasenameNoExtension}.exe",
@@ -128,7 +149,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "test game",
+            "preLaunchTask": "opencv",
         },
     ]
 }

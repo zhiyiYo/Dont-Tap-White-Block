@@ -3,29 +3,48 @@
 #include "Screenshot.h"
 #include "IOUtils.h"
 using namespace std;
-using cv::Mat;
+using namespace cv;
 
 int main(int argc, char const *argv[])
 {
     BlockDetector detector;
-    Screenshot capturer(1960, 1080);
-    int x = 560;
+    Screenshot capturer;
+
+    // 屏幕缩放比
+    double zoom = capturer.getZoom();
+
+    // 截屏区域
+    int x = 1041;
     int y = 132;
     int width = 800;
-    int height = 897;
-    int pressedY = height * 5.0 / 8 + y;
+    int height = 880;
 
-    cout << "请在 2s 内切换到游戏界面！" << endl;
-    Sleep(2000);
+    int nPress = 0;
+    int pressedY = (height * 6.0 / 8 + y) / zoom;
 
-    while (1)
+    cout << "🐛 按下 `S` 开始比赛！\n🦄 按下 `Q` 结束运行" << endl;
+
+    while (getPressedKey() != 's')
+    {
+        // pass
+    }
+
+    cout << "开始游戏！" << endl;
+
+    while (getPressedKey() != 'q')
     {
         Mat screenshot = capturer.getScreenshot(x, y, width, height);
         int column = detector.findBlackBlock(screenshot);
-        int pressedX = x + width * 1.0 / 8 * (column * 2 + 1);
-        mouseEvent(pressedX, pressedY);
-        cout << "按下第 " << column + 1 << " 列" << endl;
-        Sleep(3000);
+        Rect blockRect = detector.getBlockRect();
+
+        // 当黑块的下边缘大于
+        int blackBottom = blockRect.height + y + blockRect.y;
+        if (column >= 0 && blackBottom >= pressedY)
+        {
+            int pressedX = (x + width * 1.0 / 8 * (column * 2 + 1)) / zoom;
+            mouseClick(pressedX, pressedY);
+            printf("[ %2d ] 按下第 %d 列\n", ++nPress, column + 1);
+        }
     }
 
     return 0;

@@ -5,8 +5,8 @@
 class Screenshot
 {
 public:
-    Screenshot(int width, int height);
-    Screenshot() = delete;
+    Screenshot();
+    double static getZoom();
     cv::Mat getScreenshot();
     cv::Mat getScreenshot(int x, int y, int width, int height);
 

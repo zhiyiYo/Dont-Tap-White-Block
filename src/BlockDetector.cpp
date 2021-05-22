@@ -7,17 +7,26 @@ using cv::Mat;
  */
 int BlockDetector::findBlackBlock(Mat &img)
 {
-    cvtColor(img, m_grayImage, cv::COLOR_BGR2GRAY);
-    //auto t0 = getTickCount();
+    cv::cvtColor(img, m_grayImage, cv::COLOR_BGR2GRAY);
+    cv::copyMakeBorder(m_grayImage, m_grayImage, 1, 1, 1, 1, cv::BORDER_CONSTANT, cv::Scalar(255));
 
+    // auto t0 = cv::getTickCount();
     // 提取轮廓线
     cv::dilate(m_grayImage, m_grayImage, m_kernel, cv::Point(-1, -1), 2); // 图像膨胀消去网格线并分离分块
-    m_grayImage = m_grayImage > 80;                                       // 图像阈值化消去已点击过的灰色方块
+    m_grayImage = m_grayImage > 60;                                       // 图像阈值化消去已点击过的灰色方块
     cv::Canny(m_grayImage, m_edge, 10, 30);                               // Canny 算法进行边缘提取
     cv::findContours(m_edge, m_contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
 
-    // 获取图像中的黑块个数
-    m_nBlacks = m_contours.size();
+    // 只保留面积小于阈值的轮廓
+    decltype(m_contours) contours;
+    for (auto &i : m_contours)
+    {
+        if (cv::contourArea(i) >= 10000)
+            contours.push_back(i);
+    }
+
+    // 获取图像中的黑块个数并初始化点击的列
+    m_nBlacks = contours.size();
 
     // 根据轮廓线的外接斜矩形的中心 y 判断点击位置
     if (m_nBlacks)
@@ -25,13 +34,14 @@ int BlockDetector::findBlackBlock(Mat &img)
         int yMax = 0, x = 0;
         for (int i = 0; i < m_nBlacks; ++i)
         {
-            // 创建最小斜矩形
-            cv::RotatedRect rect = cv::minAreaRect(m_contours[i]);
-            if (rect.center.y >= yMax)
+            // 创建外接矩形
+            cv::Rect rect = cv::boundingRect(contours[i]);
+            if (rect.y >= yMax)
             {
-                yMax = rect.center.y;
-                x = rect.center.x;
+                x = rect.x;
+                yMax = rect.y;
                 m_pressedContourIndex = i;
+                m_blockRect = rect;
             }
         }
 
@@ -40,9 +50,11 @@ int BlockDetector::findBlackBlock(Mat &img)
     else
     {
         m_pressedColumn = -1;
+        m_pressedContourIndex = -1;
+        m_blockRect = cv::Rect();
     }
 
-    // std::cout << "运行时间为：" << (getTickCount() - t0) / getTickFrequency() << std::endl;
+    // std::cout << "运行时间为：" << (cv::getTickCount() - t0) / cv::getTickFrequency() << std::endl;
     return m_pressedColumn;
 }
 
@@ -74,4 +86,10 @@ int BlockDetector::getBlackBlockCounts() const
 int BlockDetector::getPressedColumn() const
 {
     return m_pressedColumn;
+}
+
+/* 返回黑块的外接矩形 */
+cv::Rect BlockDetector::getBlockRect() const
+{
+    return m_blockRect;
 }

@@ -14,7 +14,7 @@ int main(int argc, char const *argv[])
         {
             cout << "按下的键为: " << key << endl;
             if (key == 'q')
-                mouseEvent(0, 30);
+                mouseClick(0, 30);
         }
 
         Sleep(200);
