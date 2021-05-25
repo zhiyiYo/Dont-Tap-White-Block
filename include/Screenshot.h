@@ -16,5 +16,5 @@ private:
     HDC m_screenDC;
     HDC m_compatibleDC;
     HBITMAP m_hBitmap;
-    LPVOID m_screenshotData = NULL;
+    LPVOID m_screenshotData = nullptr;
 };

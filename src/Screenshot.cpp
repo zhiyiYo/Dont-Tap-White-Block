@@ -50,13 +50,13 @@ double Screenshot::getZoom()
     HWND hWnd = GetDesktopWindow();
     HMONITOR hMonitor = MonitorFromWindow(hWnd, MONITOR_DEFAULTTONEAREST);
 
-    // 获取监视器逻辑宽度与高度
+    // 获取监视器逻辑宽度
     MONITORINFOEX monitorInfo;
     monitorInfo.cbSize = sizeof(monitorInfo);
     GetMonitorInfo(hMonitor, &monitorInfo);
     int cxLogical = (monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left);
 
-    // 获取监视器物理宽度与高度
+    // 获取监视器物理宽度
     DEVMODE dm;
     dm.dmSize = sizeof(dm);
     dm.dmDriverExtra = 0;

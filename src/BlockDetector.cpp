@@ -29,7 +29,7 @@ int BlockDetector::findBlackBlock(Mat &img)
     m_nBlacks = contours.size();
 
     // 根据轮廓线的外接斜矩形的中心 y 判断点击位置
-    if (m_nBlacks)
+    if (m_nBlacks > 0)
     {
         int yMax = 0, x = 0;
         for (int i = 0; i < m_nBlacks; ++i)
@@ -49,9 +49,7 @@ int BlockDetector::findBlackBlock(Mat &img)
     }
     else
     {
-        m_pressedColumn = -1;
-        m_pressedContourIndex = -1;
-        m_blockRect = cv::Rect();
+        reset();
     }
 
     // std::cout << "运行时间为：" << (cv::getTickCount() - t0) / cv::getTickFrequency() << std::endl;
@@ -92,4 +90,12 @@ int BlockDetector::getPressedColumn() const
 cv::Rect BlockDetector::getBlockRect() const
 {
     return m_blockRect;
+}
+
+/* 重置成员 */
+void BlockDetector::reset()
+{
+    m_pressedColumn = -1;
+    m_pressedContourIndex = -1;
+    m_blockRect = cv::Rect();
 }

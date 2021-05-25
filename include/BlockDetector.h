@@ -21,4 +21,5 @@ private:
     cv::Mat m_edge, m_grayImage;
     cv::Mat m_kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5));
     std::vector<std::vector<cv::Point>> m_contours;
+    void reset();
 };
