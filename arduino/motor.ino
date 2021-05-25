@@ -1,7 +1,7 @@
 #include <Stepper.h>
 
 const int stepsPerRevolution = 200;
-int steps = 10;
+int steps = 200;
 
 // initialize the stepper library on pins 8 through 11:
 Stepper myStepper(stepsPerRevolution, 8, 9, 10, 11);
