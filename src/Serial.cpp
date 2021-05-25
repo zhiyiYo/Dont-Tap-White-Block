@@ -52,25 +52,26 @@ bool Serial::initPort(UINT port, UINT baudRate, UINT byteSize, BYTE stopBits, BY
     dcb.ByteSize = byteSize;
     dcb.StopBits = stopBits;
     dcb.fBinary = true;
-    if (parity == 0)
+    switch (parity)
     {
+    case 0:
         dcb.fParity = false;
         dcb.Parity = NOPARITY;
-    }
-    else if (parity == 1)
-    {
+        break;
+    case 1:
         dcb.fParity = true;
         dcb.Parity = ODDPARITY;
-    }
-    else if (parity == 2)
-    {
+        break;
+    case 2:
         dcb.fParity = true;
         dcb.Parity = EVENPARITY;
-    }
-    else
-    {
+
+    default:
         return false;
+        break;
     }
+
+
     if (!SetCommState(hComm, &dcb))
     {
         return false;
