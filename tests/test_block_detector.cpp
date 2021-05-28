@@ -24,11 +24,11 @@ int main(int argc, char const *argv[])
     for (size_t i = 0; i < imPaths.size(); ++i)
     {
         image = imread(imPaths[i]);
-        assertEqual<int>(answers[i], detector.findBlackBlock(image));
+        assertEqual<int>(answers[i], detector.findBlackBlock(image, 60));
     }
 
     // 绘制轮廓线
-    detector.drawBlackBlockContours();
+    detector.drawBlackBlock();
 
     return 0;
 }

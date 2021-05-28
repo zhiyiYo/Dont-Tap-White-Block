@@ -52,7 +52,7 @@ bool Serial::initPort(UINT port, UINT baudRate, UINT byteSize, BYTE stopBits, BY
     dcb.ByteSize = byteSize;
     dcb.StopBits = stopBits;
     dcb.fBinary = true;
-    
+
     switch (parity)
     {
     case 0:
@@ -153,8 +153,6 @@ UINT WINAPI Serial::serialThread(void *pParam)
 {
     Serial *pSerial = (Serial *)pParam;
 
-    char buf[50];
-    DWORD readNum;
     while (!pSerial->threadExit_flag)
     {
         UINT dataInCOM = 0;

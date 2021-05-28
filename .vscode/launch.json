@@ -5,7 +5,28 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "test game (Launch)",
+            "name": "Don't Tap White Block (Launch)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/dont_tap_while_block.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "D:/MinGW/mingw64/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Don't Tap White Block",
+        },
+        {
+            "name": "test PC game (Launch)",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/${fileBasenameNoExtension}.exe",
@@ -23,7 +44,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "test game",
+            "preLaunchTask": "test PC game",
         },
         {
             "name": "test block detector (Launch)", // 配置名称，将会在启动配置的下拉菜单中显示

@@ -5,11 +5,12 @@ dll = -L D:/OpenCV/opencv/build/x64/MinGW/bin -l libopencv_calib3d450 -llibopenc
 CXXFLAGS = -std=c++17 -Wall -I include -I$(opencv_include_dir)
 
 serial_obj = test_serial.o Serial.o
-motor_obj = test_motor.o Serial.o BlockDetector.o
+motor_obj = test_motor.o Serial.o
 screenshot_obj = test_screenshot.o Screenshot.o
 block_detector_obj = test_block_detector.o BlockDetector.o
 io_utils_obj = test_io_utils.o IOUtils.o
-game_obj = test_game.o BlockDetector.o Screenshot.o IOUtils.o
+pc_game_obj = test_pc_game.o BlockDetector.o Screenshot.o IOUtils.o
+obj = main.o Serial.o BlockDetector.o IOUtils.o
 
 
 vpath %.cpp src
@@ -18,17 +19,20 @@ vpath %.h include
 vpath %.h $(opencv_include_dir)
 
 
-test_game: $(game_obj)
-	$(cxx) $(dll) -O3 -o build/$@ $(game_obj) -lgdi32
+dont_tap_while_block: $(obj)
+	$(cxx) $(dll) -O3 -o build/$@ $(obj)
+
+test_pc_game: $(pc_game_obj)
+	$(cxx) $(dll) -O3 -o build/$@ $(pc_game_obj) -lgdi32
 
 test_serial: $(serial_obj)
 	$(cxx) -o build/$@ $(serial_obj)
 
+test_motor: $(motor_obj)
+	$(cxx) -o build/$@ $(motor_obj)
+
 test_io_utils: $(io_utils_obj)
 	$(cxx) -o build/$@ $(io_utils_obj)
-
-test_motor: $(motor_obj)
-	$(cxx) $(dll) -o build/$@ $(motor_obj)
 
 test_block_detector: $(block_detector_obj)
 	$(cxx) $(dll) -O3 -o build/$@ $(block_detector_obj)
@@ -42,14 +46,15 @@ IOUtils.o: IOUtils.h
 Screenshot.o: Screenshot.h
 BlockDetector.o: BlockDetector.h
 
+main.o: Serial.h BlockDetector.h IOUtils.h
 test_serial.o: Serial.h
 test_io_utils.o: IOUtils.h
 test_screenshot.o: Screenshot.h
 test_block_detector.o: BlockDetector.h
 test_motor.o: Serial.h BlockDetector.h
-test_game.o: IOUtils.h BlockDetector.h Screenshot.h
+test_pc_game.o: IOUtils.h BlockDetector.h Screenshot.h
 
 
 .PHONY: clean
 clean:
-	del $(serial_obj) $(block_detector_obj) $(motor_obj) $(screenshot_obj) $(io_utils_obj) $(game_obj)
+	del $(serial_obj) $(block_detector_obj) $(motor_obj) $(screenshot_obj) $(io_utils_obj) $(pc_game_obj)

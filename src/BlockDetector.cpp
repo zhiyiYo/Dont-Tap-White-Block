@@ -3,25 +3,31 @@ using cv::Mat;
 
 /** @brief 在输入图像中寻找应该被点击的黑块所在的列
  * @param img 输入图像
+ * @param threshold 黑块的最大灰度值
+ * @param minArea 黑块的最小面积
+ * @param kernelSize 卷积核大小
  * @return 应该被点击的列，取值 0 ~ 3，如果没有找到返回 -1
  */
-int BlockDetector::findBlackBlock(Mat &img)
+int BlockDetector::findBlackBlock(const Mat &img, int threshold, int minArea, cv::Size kernelSize)
 {
+    // auto t0 = cv::getTickCount();
+
     cv::cvtColor(img, m_grayImage, cv::COLOR_BGR2GRAY);
     cv::copyMakeBorder(m_grayImage, m_grayImage, 1, 1, 1, 1, cv::BORDER_CONSTANT, cv::Scalar(255));
 
-    // auto t0 = cv::getTickCount();
+    Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, kernelSize);
+
     // 提取轮廓线
-    cv::dilate(m_grayImage, m_grayImage, m_kernel, cv::Point(-1, -1), 2); // 图像膨胀消去网格线并分离分块
-    m_grayImage = m_grayImage > 60;                                       // 图像阈值化消去已点击过的灰色方块
-    cv::Canny(m_grayImage, m_edge, 10, 30);                               // Canny 算法进行边缘提取
+    m_binaryImage = m_grayImage > threshold;                                // 图像阈值化消去已点击过的灰色方块
+    cv::dilate(m_binaryImage, m_binaryImage, kernel, cv::Point(-1, -1), 2); // 图像膨胀消去网格线并分离分块
+    cv::Canny(m_binaryImage, m_edge, 10, 30);                               // Canny 算法进行边缘提取
     cv::findContours(m_edge, m_contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
 
     // 只保留面积小于阈值的轮廓
     decltype(m_contours) contours;
     for (auto &i : m_contours)
     {
-        if (cv::contourArea(i) >= 10000)
+        if (cv::contourArea(i) >= minArea)
             contours.push_back(i);
     }
 
@@ -56,22 +62,19 @@ int BlockDetector::findBlackBlock(Mat &img)
     return m_pressedColumn;
 }
 
-/* 绘制黑块轮廓线，红色边框包围的是应该被点击的黑块 */
-void BlockDetector::drawBlackBlockContours()
+/* 绘制应该被点击的黑块的外接矩形 */
+Mat BlockDetector::drawBlackBlock()
 {
-    Mat dst = m_grayImage.clone();
+    Mat dst = m_binaryImage.clone();
     cv::cvtColor(dst, dst, cv::COLOR_GRAY2BGR);
 
-    // 绘制轮廓线
-    for (int i = 0; i < m_nBlacks; ++i)
+    // 绘制外接矩形
+    if (m_nBlacks > 0)
     {
-        cv::Scalar color(0, i == m_pressedContourIndex ? 0 : 255, 255);
-        cv::drawContours(dst, m_contours, i, color, 2, cv::LINE_AA);
+        cv::Scalar color(0, 0, 255);
+        cv::rectangle(dst, m_blockRect, color, 2, cv::LINE_AA);
     }
-
-    // 显示图像
-    cv::imshow("Detect result", dst);
-    cv::waitKey(0);
+    return dst;
 }
 
 /* 返回黑块个数 */

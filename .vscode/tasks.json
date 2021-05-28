@@ -92,9 +92,9 @@
         },
         {
             "type": "process",
-            "label": "test game",
+            "label": "test PC game",
             "command": "make",
-            "args": ["test_game"],
+            "args": ["test_pc_game"],
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -106,7 +106,25 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "detail": "测试别踩白块游戏"
+            "detail": "测试电脑端别踩白块游戏"
+        },
+        {
+            "type": "process",
+            "label": "Don't Tap White Block",
+            "command": "make",
+            "args": ["dont_tap_while_block"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            // 运行生成任务
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "别踩白块"
         },
         {
             "type": "process",
@@ -117,7 +135,7 @@
                 "-Wall",
                 "${relativeFile}",
                 "-o",
-                "${fileDirname}/build/${fileBasenameNoExtension}.exe",
+                "${workspaceFolder}/build/${fileBasenameNoExtension}.exe",
                 "-I",
                 "D:/OpenCV/opencv/build/include", //此处输入opencv所在build/include文件夹，用于编译时导入对应库文件
                 "-L",
@@ -150,7 +168,7 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "detail": "测试别踩白块游戏"
+            "detail": "使用 OpenCV"
         },
         {
             "type": "process",
