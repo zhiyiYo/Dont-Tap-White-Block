@@ -1,7 +1,7 @@
 {
-    "port": "COM5",
+    "port": "COM6",
     "board": "arduino:avr:uno",
     "programmer": "arduino:avrisp",
-    "sketch": "arduino/soft_serial/test_soft_serial.ino",
+    "sketch": "arduino/stepper/stepper.ino",
     "output": "./build/arduino"
 }
