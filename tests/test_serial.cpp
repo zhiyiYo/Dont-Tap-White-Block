@@ -2,19 +2,20 @@
 #include "Serial.h"
 using namespace std;
 
-int main()
+int main(int argc, char const *argv[])
 {
-    char a[] = "1ABC";
     Serial serial;
+    char msg[] = "1";
+    int port = argc == 1 ? 5 : argv[1][0] - '0';
 
     // 初始化串口
-    if (!serial.initPort(5, 9600, 8, 1, 0))
+    if (!serial.initPort(port, 9600, 8, 1, 0))
     {
         cout << "Open COM wrong!" << endl;
     }
 
     // 向串口发送数据
-    cout << "Send data: " << a << (serial.writeData(a, 4) ? " ✅" : " ❌") << endl;
+    cout << "Send data: " << msg << (serial.writeData(msg, 1) ? " ✅" : " ❌") << endl;
 
     // 创建监听串口的线程
     if (serial.openThread())
@@ -24,6 +25,6 @@ int main()
         }
     else
         cout << "Open thread wrong!";
-        
+
     return 0;
 }
