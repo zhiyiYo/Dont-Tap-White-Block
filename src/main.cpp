@@ -13,12 +13,18 @@ int main(int argc, char const *argv[])
 
     // 创建串口实例
     Serial serial;
+    if (!serial.initPort(8, 9600, 8, 1, 0))
+    {
+        std::cerr << "打开串口失败！" << std::endl;
+        return -1;
+    };
 
     // 设置游戏区域
-    cv::Rect gameRegion(150, 25, 320, 430);
+    cv::Rect gameRegion(150, 312, 320, 430 / 3);
 
     bool isPlaying = false;
     bool endGame = false;
+    bool isClickDone = true;
     std::cout << "🐛 按下 `S` 开始比赛\n🦄 按下 `Q` 结束运行" << std::endl;
 
     // 读入摄像头的拍摄内容
@@ -45,14 +51,19 @@ int main(int argc, char const *argv[])
         }
 
         // 游戏开始
-        if (isPlaying)
+        if (isPlaying && isClickDone)
         {
             // 寻找黑块
-            int column = detector.findBlackBlock(gameImage, 70, 9000, cv::Size(3, 3));
+            int column = detector.findBlackBlock(gameImage, 70, 7000, cv::Size(1, 1));
             if (column >= 0)
             {
+                // 发送敲击命令
+                char col = column + '0';
+                serial.writeData(&col, 1);
                 // 绘制黑块轮廓线
                 cv::rectangle(gameImage, detector.getBlockRect(), cv::Scalar(0, 0, 255), 2);
+                // 在敲击完成前禁止继续敲击
+                isClickDone = column == 4 ? false : true;
             }
         }
 

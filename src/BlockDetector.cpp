@@ -5,7 +5,7 @@ using cv::Mat;
  * @param img 输入图像
  * @param threshold 黑块的最大灰度值
  * @param minArea 黑块的最小面积
- * @param kernelSize 卷积核大小
+ * @param kernelSize 图像膨胀的卷积核大小
  * @return 应该被点击的列，取值 0 ~ 3，如果没有找到返回 -1
  */
 int BlockDetector::findBlackBlock(const Mat &img, int threshold, int minArea, cv::Size kernelSize)

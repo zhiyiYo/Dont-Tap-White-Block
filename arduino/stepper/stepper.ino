@@ -33,5 +33,6 @@ void loop()
             stepper_1.step(-steps);
             delay(100);
         }
+        softSerial.print('d');
     }
 }
