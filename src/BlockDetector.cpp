@@ -23,7 +23,7 @@ int BlockDetector::findBlackBlock(const Mat &img, int threshold, int minArea, cv
     cv::Canny(m_binaryImage, m_edge, 10, 30);                               // Canny 算法进行边缘提取
     cv::findContours(m_edge, m_contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
 
-    // 只保留面积小于阈值的轮廓
+    // 只保留面积大于阈值的轮廓
     decltype(m_contours) contours;
     for (auto &i : m_contours)
     {

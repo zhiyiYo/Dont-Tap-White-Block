@@ -29,7 +29,7 @@
             "name": "test PC game (Launch)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/${fileBasenameNoExtension}.exe",
+            "program": "${workspaceFolder}/build/test_pc_game.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -47,17 +47,17 @@
             "preLaunchTask": "test PC game",
         },
         {
-            "name": "test block detector (Launch)", // 配置名称，将会在启动配置的下拉菜单中显示
-            "type": "cppdbg", // 配置类型，这里只能为cppdbg
-            "request": "launch", // 请求配置类型，可以为launch（启动）或attach（附加）
-            "program": "${workspaceFolder}/build/${fileBasenameNoExtension}.exe", // 将要进行调试的程序的路径
-            "args": [], // 程序调试时传递给程序的命令行参数，一般设为空即可
-            "stopAtEntry": false, // 设为true时程序将暂停在程序入口处，一般设置为false
-            "cwd": "${workspaceFolder}", // 调试程序时的工作目录，一般为${workspaceFolder}即代码所在目录
+            "name": "test block detector (Launch)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/test_block_detector.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
             "environment": [],
-            "externalConsole": false, // 调试时是否显示控制台窗口，一般设置为true显示控制台
+            "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "D:/MinGW/mingw64/bin/gdb.exe",// miDebugger的路径，注意这里要与MinGw的路径对应
+            "miDebuggerPath": "D:/MinGW/mingw64/bin/gdb.exe",
             "setupCommands": [
                 {
                     "description": "为 gdb 启用整齐打印",
@@ -65,13 +65,34 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "test block detector", // 调试会话开始前执行的任务，一般为编译程序，c++为g++, c为gcc
+            "preLaunchTask": "test block detector",
+        },
+        {
+            "name": "test screen detector (Launch)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/test_screen_detector.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "D:/MinGW/mingw64/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "test screen detector",
         },
         {
             "name": "test serial (Launch)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/${fileBasenameNoExtension}.exe",
+            "program": "${workspaceFolder}/build/test_serial.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -92,7 +113,7 @@
             "name": "test motor (Launch)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/${fileBasenameNoExtension}.exe",
+            "program": "${workspaceFolder}/build/test_motor.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -113,7 +134,7 @@
             "name": "test screenshot (Launch)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/${fileBasenameNoExtension}.exe",
+            "program": "${workspaceFolder}/build/test_screenshot.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -134,7 +155,7 @@
             "name": "test IOUtils (Launch)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/${fileBasenameNoExtension}.exe",
+            "program": "${workspaceFolder}/build/test_io_utils.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

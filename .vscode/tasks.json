@@ -38,6 +38,24 @@
         },
         {
             "type": "process",
+            "label": "test screen detector",
+            "command": "make",
+            "args": ["test_screen_detector"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            // 运行生成任务
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "测试手机屏幕探测器"
+        },
+        {
+            "type": "process",
             "label": "test motor",
             "command": "make",
             "args": ["test_motor"],
