@@ -12,12 +12,12 @@ public:
 
     bool initPort(UINT port, UINT baudRate, UINT byteSize, BYTE stopBits, BYTE parity);
     bool writeData(char *data, int len);
-    bool readOneData(char &data);
     bool openThread();
     bool closeThread();
     std::string readData(bool clr = false, int len = 1);
 
 private:
+    bool readOneData(char &data);
     bool openPort(TCHAR *portName);
     bool closePort();
     static UINT WINAPI serialThread(void *pParam);

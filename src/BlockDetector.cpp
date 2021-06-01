@@ -51,7 +51,7 @@ int BlockDetector::findBlackBlock(const Mat &img, int threshold, int minArea, cv
             }
         }
 
-        m_pressedColumn = x / (img.cols / 4);
+        m_pressedColumn = (x + m_blockRect.width / 2) / (img.cols / 4);
     }
     else
     {

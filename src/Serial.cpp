@@ -157,6 +157,8 @@ UINT WINAPI Serial::serialThread(void *pParam)
     {
         std::string buf;
         buf = pSerial->readData();
+        if(buf.length()>0)
+            std::cout << buf << std::endl;
     }
     return 0;
 }

@@ -2,6 +2,6 @@
     "port": "COM6",
     "board": "arduino:avr:uno",
     "programmer": "arduino:avrisp",
-    "sketch": "arduino/stepper/stepper.ino",
+    "sketch": "arduino/test_stepper/test_stepper.ino",
     "output": "./build/arduino"
 }
