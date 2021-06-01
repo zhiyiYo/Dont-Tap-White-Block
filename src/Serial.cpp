@@ -155,28 +155,8 @@ UINT WINAPI Serial::serialThread(void *pParam)
 
     while (!pSerial->threadExit_flag)
     {
-        UINT dataInCOM = 0;
-        DWORD error;
-        COMSTAT comstat;
-        memset(&comstat, 0, sizeof(COMSTAT));
-        if (ClearCommError(pSerial->hComm, &error, &comstat))
-            dataInCOM = comstat.cbInQue;
-
-        // std::cout << "test:thread " << dataInCOM << std::endl;
-        std::string receive = "";
-        while (dataInCOM > 0)
-        {
-            char dataRead;
-            if (pSerial->readOneData(dataRead))
-            {
-                receive += dataRead;
-                dataInCOM--;
-            }
-            if (dataInCOM == 0)
-            {
-                std::cout << "Received data in COM: " << receive << std::endl;
-            }
-        }
+        std::string buf;
+        buf = pSerial->readData();
     }
     return 0;
 }
@@ -223,4 +203,45 @@ bool Serial::readOneData(char &data)
         return false;
     }
     return true;
+}
+
+/** @brief 读取当前的串口内的数据
+ * @param clr 是否清除当前串口缓冲区已有的数据，true为清除，默认false
+ * @param len 如果清除当前串口缓冲区数据，需指定读取长度，默认长度为1
+ * @return 返回读取到的数据
+ */
+std::string Serial::readData(bool clr, int len)
+{
+    UINT dataInCOM = 0;
+    DWORD error;
+    COMSTAT comstat;
+    if (clr)
+    {
+        PurgeComm(hComm, PURGE_RXCLEAR | PURGE_RXABORT);
+        dataInCOM = len;
+    }
+    else
+    {
+        memset(&comstat, 0, sizeof(COMSTAT));
+        if (ClearCommError(hComm, &error, &comstat))
+            dataInCOM = comstat.cbInQue;
+    }
+
+    // std::cout << "test:thread " << dataInCOM << std::endl;
+    std::string receive = "";
+    while (dataInCOM > 0)
+    {
+        char dataRead;
+        if (readOneData(dataRead))
+        {
+            receive += dataRead;
+            dataInCOM--;
+        }
+        if (dataInCOM == 0)
+        {
+            //std::cout << "Received data in COM: " << receive << std::endl;
+            return receive;
+        }
+    }
+    return "";
 }

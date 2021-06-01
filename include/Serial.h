@@ -15,6 +15,7 @@ public:
     bool readOneData(char &data);
     bool openThread();
     bool closeThread();
+    std::string readData(bool clr = false, int len = 1);
 
 private:
     bool openPort(TCHAR *portName);

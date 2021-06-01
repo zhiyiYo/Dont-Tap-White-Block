@@ -5,7 +5,22 @@ using namespace std;
 int main(int argc, char const *argv[])
 {
     Serial serial;
-    int count = 0;
+    int a;
+    if (!serial.initPort(3, 9600, 8, 1, 0))
+    {
+        cout << "Open COM wrong!" << endl;
+    }
+    while (1)
+    {
+        cin >> a;
+        if (a == 1)
+            cout << serial.readData() << endl;
+        else if (a == 2)
+            cout << serial.readData(true) << endl;
+        else if (a == 3)
+            cout << serial.readData(true, 2) << endl;
+    }
+    /* int count = 0;
     char msg = '0';
     int port = argc == 1 ? 5 : argv[1][0] - '0';
 
@@ -31,7 +46,7 @@ int main(int argc, char const *argv[])
         }
     }
     else
-        cout << "Open thread wrong!";
+        cout << "Open thread wrong!"; */
 
     return 0;
 }
