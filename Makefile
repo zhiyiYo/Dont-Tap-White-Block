@@ -11,7 +11,7 @@ block_detector_obj = test_block_detector.o BlockDetector.o
 screen_detector_obj = test_screen_detector.o ScreenDetector.o
 io_utils_obj = test_io_utils.o IOUtils.o
 pc_game_obj = test_pc_game.o BlockDetector.o Screenshot.o IOUtils.o
-obj = main.o Serial.o BlockDetector.o IOUtils.o
+main_obj = main.o Serial.o BlockDetector.o ScreenDetector.o
 
 
 vpath %.cpp src
@@ -20,8 +20,8 @@ vpath %.h include
 vpath %.h $(opencv_include_dir)
 
 
-dont_tap_while_block: $(obj)
-	$(cxx) $(dll) -O3 -o build/$@ $(obj)
+dont_tap_while_block: $(main_obj)
+	$(cxx) $(dll) -O3 -o build/$@ $(main_obj)
 
 test_pc_game: $(pc_game_obj)
 	$(cxx) $(dll) -O3 -o build/$@ $(pc_game_obj) -lgdi32
@@ -50,7 +50,7 @@ IOUtils.o: IOUtils.h
 Screenshot.o: Screenshot.h
 BlockDetector.o: BlockDetector.h
 
-main.o: Serial.h BlockDetector.h IOUtils.h
+main.o: Serial.h BlockDetector.h ScreenDetector.h
 test_serial.o: Serial.h
 test_io_utils.o: IOUtils.h
 test_screenshot.o: Screenshot.h
@@ -62,4 +62,4 @@ test_pc_game.o: IOUtils.h BlockDetector.h Screenshot.h
 
 .PHONY: clean
 clean:
-	del $(serial_obj) $(block_detector_obj) $(motor_obj) $(screenshot_obj) $(io_utils_obj) $(pc_game_obj) $(screen_detector_obj)
+	del $(serial_obj) $(block_detector_obj) $(motor_obj) $(screenshot_obj) $(io_utils_obj) $(pc_game_obj) $(screen_detector_obj) $(main_obj)

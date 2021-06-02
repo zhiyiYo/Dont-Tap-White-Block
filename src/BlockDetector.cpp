@@ -21,7 +21,7 @@ int BlockDetector::findBlackBlock(const Mat &img, int threshold, int minArea, cv
     m_binaryImage = m_grayImage > threshold;                                // 图像阈值化消去已点击过的灰色方块
     cv::dilate(m_binaryImage, m_binaryImage, kernel, cv::Point(-1, -1), 2); // 图像膨胀消去网格线并分离分块
     cv::Canny(m_binaryImage, m_edge, 10, 30);                               // Canny 算法进行边缘提取
-    cv::findContours(m_edge, m_contours, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+    cv::findContours(m_edge, m_contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
 
     // 只保留面积大于阈值的轮廓
     decltype(m_contours) contours;
