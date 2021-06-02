@@ -1,5 +1,6 @@
 #include "ScreenDetector.h"
 using cv::Mat;
+using cv::Point2f;
 
 int main(int argc, char const *argv[])
 {
@@ -10,10 +11,10 @@ int main(int argc, char const *argv[])
     while (1)
     {
         camera >> image;
-        cv::Rect rect = detector.findScreenRect(image, 90, 5000, cv::Size(2, 2));
-        cv::imshow("camera", detector.drawScreenRect(image));
-        //std::cout << detector.getRotateScreenRect().angle << ", ";
-        cv::waitKey(40);
+        auto screen = detector.getScreen(image, 90, 4000, cv::Size(2, 2));
+        cv::imshow("摄像头", detector.drawScreenRect(image));
+        cv::imshow("手机屏幕", screen);
+        cv::waitKey(30);
     }
 
     return 0;

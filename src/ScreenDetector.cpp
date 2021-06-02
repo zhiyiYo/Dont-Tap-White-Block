@@ -2,7 +2,7 @@
 using cv::Mat;
 using cv::Rect;
 
-/** @brief 寻找手机屏幕的外接矩形
+/** @brief 寻找手机屏幕的正外接矩形
  * @param image 输入图像，类型为 BGR
  * @param threshold 图像二值化阈值
  * @param minArea 黑块的最小面积
@@ -32,21 +32,23 @@ Rect ScreenDetector::findScreenRect(const Mat &image, int threshold, int minArea
     size_t num = contours.size();
     if (num > 0)
     {
-        m_rotateScreenRect = cv::minAreaRect(contours[0]);
-        //m_screenRect = cv::boundingRect(contours[0]);
+        m_rotateScreenRect = cv::RotatedRect();
         for (size_t i = 0; i < num; ++i)
         {
-            // auto rect = cv::boundingRect(contours[i]);
             auto rect = cv::minAreaRect(contours[i]);
             if (rect.boundingRect().area() > m_rotateScreenRect.boundingRect().area())
+            {
                 m_rotateScreenRect = rect;
+                // 如果直接使用 m_rotateScreenRect.boundingRect() 会出现数组越界
+                m_screenRect = cv::boundingRect(contours[i]);
+            }
         }
     }
     else
     {
         m_rotateScreenRect = cv::RotatedRect();
+        m_screenRect = Rect();
     }
-    m_screenRect = m_rotateScreenRect.boundingRect();
     return m_screenRect;
 }
 
@@ -71,4 +73,38 @@ Mat ScreenDetector::drawScreenRect(const Mat &image)
 cv::RotatedRect ScreenDetector::getRotateScreenRect() const
 {
     return m_rotateScreenRect;
+}
+
+/** @brief 获取手机屏幕
+ * @param image 输入图像，类型为 BGR
+ * @param threshold 图像二值化阈值
+ * @param minArea 黑块的最小面积
+ * @param kernelSize 图像膨胀卷积核大小
+ */
+Mat ScreenDetector::getScreen(const Mat &image, int threshold, int minArea, cv::Size kernelSize)
+{
+    // 定位手机屏幕
+    findScreenRect(image, threshold, minArea, kernelSize);
+
+    // 如果没有检测到手机屏幕就直接返回原图
+    if (m_screenRect.empty())
+        return image;
+
+    // 截取手机屏幕
+    Mat dst = image(m_screenRect).clone();
+
+    // 旋转手机屏幕
+    double angle = m_rotateScreenRect.angle;
+    cv::Size screenSize = m_rotateScreenRect.size;
+    if (angle < -45)
+    {
+        angle += 90;
+        std::swap(screenSize.width, screenSize.height);
+    }
+    cv::Point2f center(dst.cols / 2, dst.rows / 2);
+    Mat rotateMat = getRotationMatrix2D(center, angle, 1);
+    cv::warpAffine(dst, dst, rotateMat, dst.size());
+    cv::getRectSubPix(dst, screenSize, center, dst);
+    
+    return dst;
 }

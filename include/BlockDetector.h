@@ -20,7 +20,7 @@ private:
     int m_pressedColumn = -1;
     int m_pressedContourIndex = -1;
     cv::Rect m_blockRect;
-    cv::Mat m_binaryImage, m_grayImage;
+    cv::Mat m_binaryImage, m_grayImage,m_edge;
     std::vector<std::vector<cv::Point>> m_contours;
     void reset();
 };
