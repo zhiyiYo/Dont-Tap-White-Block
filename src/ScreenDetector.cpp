@@ -33,16 +33,18 @@ Rect ScreenDetector::findScreenRect(const Mat &image, int threshold, int minArea
     if (num > 0)
     {
         m_rotateScreenRect = cv::RotatedRect();
+        size_t rectIndex = 0;
         for (size_t i = 0; i < num; ++i)
         {
             auto rect = cv::minAreaRect(contours[i]);
             if (rect.boundingRect().area() > m_rotateScreenRect.boundingRect().area())
             {
                 m_rotateScreenRect = rect;
-                // 如果直接使用 m_rotateScreenRect.boundingRect() 会出现数组越界
-                m_screenRect = cv::boundingRect(contours[i]);
+                rectIndex = i;
             }
         }
+        // 如果直接使用 m_rotateScreenRect.boundingRect() 会出现数组越界
+        m_screenRect = cv::boundingRect(contours[rectIndex]);
     }
     else
     {
@@ -105,6 +107,6 @@ Mat ScreenDetector::getScreen(const Mat &image, int threshold, int minArea, cv::
     Mat rotateMat = getRotationMatrix2D(center, angle, 1);
     cv::warpAffine(dst, dst, rotateMat, dst.size());
     cv::getRectSubPix(dst, screenSize, center, dst);
-    
+
     return dst;
 }

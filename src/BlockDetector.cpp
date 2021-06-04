@@ -10,8 +10,6 @@ using cv::Mat;
  */
 int BlockDetector::findBlackBlock(const Mat &img, int threshold, int minArea, cv::Size kernelSize)
 {
-    // auto t0 = cv::getTickCount();
-
     cv::cvtColor(img, m_grayImage, cv::COLOR_BGR2GRAY);
     cv::copyMakeBorder(m_grayImage, m_grayImage, 1, 1, 1, 1, cv::BORDER_CONSTANT, cv::Scalar(255));
 
@@ -37,28 +35,26 @@ int BlockDetector::findBlackBlock(const Mat &img, int threshold, int minArea, cv
     // 根据轮廓线的外接斜矩形的中心 y 判断点击位置
     if (m_nBlacks > 0)
     {
-        int yMax = 0, x = 0;
+        int yMax = 0;
         for (int i = 0; i < m_nBlacks; ++i)
         {
             // 创建外接矩形
             cv::Rect rect = cv::boundingRect(contours[i]);
             if (rect.y >= yMax)
             {
-                x = rect.x;
                 yMax = rect.y;
                 m_pressedContourIndex = i;
                 m_blockRect = rect;
             }
         }
 
-        m_pressedColumn = (x + m_blockRect.width / 2) / (img.cols / 4);
+        m_pressedColumn = (m_blockRect.x + m_blockRect.width / 2) / (img.cols / 4);
     }
     else
     {
         reset();
     }
 
-    // std::cout << "运行时间为：" << (cv::getTickCount() - t0) / cv::getTickFrequency() << std::endl;
     return m_pressedColumn;
 }
 
