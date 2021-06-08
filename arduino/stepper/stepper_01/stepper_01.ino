@@ -3,7 +3,8 @@
 
 int stepperNum;
 int steps = 5;
-int stepDelay = 100;
+int pressDelay = 85;
+int releaseDelay = 20;
 int stepperSpeed = 100;
 SoftwareSerial softSerial(2, 3);
 Stepper stepper_0(200, 4, 5, 6, 7);
@@ -24,17 +25,17 @@ void loop()
         if (stepperNum == 0)
         {
             stepper_0.step(-steps);
-            delay(stepDelay);
+            delay(pressDelay);
             stepper_0.step(steps);
-            delay(stepDelay);
+            delay(releaseDelay);
             softSerial.print('0');
         }
         else if (stepperNum == 1)
         {
             stepper_1.step(-steps + 1);
-            delay(stepDelay);
+            delay(pressDelay);
             stepper_1.step(steps - 1);
-            delay(stepDelay);
+            delay(releaseDelay);
             softSerial.print('1');
         }
     }

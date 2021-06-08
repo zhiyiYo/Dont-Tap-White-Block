@@ -16,9 +16,7 @@ int main(int argc, char const *argv[])
             if (key == 's')
                 mouseClick(0, 30);
             else if (key == 'q')
-            {
                 break;
-            }
         }
 
         Sleep(200);

@@ -110,9 +110,9 @@
         },
         {
             "type": "process",
-            "label": "test PC game",
+            "label": "PC game",
             "command": "make",
-            "args": ["test_pc_game"],
+            "args": ["pc_game"],
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -124,13 +124,13 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "detail": "测试电脑端别踩白块游戏"
+            "detail": "电脑端别踩白块游戏"
         },
         {
             "type": "process",
             "label": "Don't Tap White Block",
             "command": "make",
-            "args": ["dont_tap_while_block"],
+            "args": ["dont_tap_white_block"],
             "options": {
                 "cwd": "${workspaceFolder}"
             },
