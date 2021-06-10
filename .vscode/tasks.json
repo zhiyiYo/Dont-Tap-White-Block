@@ -1,7 +1,7 @@
 {
     "tasks": [
         {
-            "type": "process",
+            "type": "shell",
             "label": "test serial",
             "command": "make",
             "args": ["test_serial"],
@@ -13,13 +13,13 @@
             ],
             // 运行生成任务
             "group": {
-                "kind": "build",
+                "kind": "test",
                 "isDefault": true
             },
             "detail": "测试串口"
         },
         {
-            "type": "process",
+            "type": "shell",
             "label": "test block detector",
             "command": "make",
             "args": ["test_block_detector"],
@@ -31,13 +31,13 @@
             ],
             // 运行生成任务
             "group": {
-                "kind": "build",
+                "kind": "test",
                 "isDefault": true
             },
             "detail": "测试黑块探测器"
         },
         {
-            "type": "process",
+            "type": "shell",
             "label": "test screen detector",
             "command": "make",
             "args": ["test_screen_detector"],
@@ -49,13 +49,13 @@
             ],
             // 运行生成任务
             "group": {
-                "kind": "build",
+                "kind": "test",
                 "isDefault": true
             },
             "detail": "测试手机屏幕探测器"
         },
         {
-            "type": "process",
+            "type": "shell",
             "label": "test motor",
             "command": "make",
             "args": ["test_motor"],
@@ -67,13 +67,13 @@
             ],
             // 运行生成任务
             "group": {
-                "kind": "build",
+                "kind": "test",
                 "isDefault": true
             },
             "detail": "测试电机转动"
         },
         {
-            "type": "process",
+            "type": "shell",
             "label": "test screenshot",
             "command": "make",
             "args": ["test_screenshot"],
@@ -85,13 +85,13 @@
             ],
             // 运行生成任务
             "group": {
-                "kind": "build",
+                "kind": "test",
                 "isDefault": true
             },
             "detail": "测试截屏功能"
         },
         {
-            "type": "process",
+            "type": "shell",
             "label": "test IOUtils",
             "command": "make",
             "args": ["test_io_utils"],
@@ -103,13 +103,13 @@
             ],
             // 运行生成任务
             "group": {
-                "kind": "build",
+                "kind": "test",
                 "isDefault": true
             },
             "detail": "测试按键检测和模拟鼠标点击功能"
         },
         {
-            "type": "process",
+            "type": "shell",
             "label": "PC game",
             "command": "make",
             "args": ["pc_game"],
@@ -127,7 +127,7 @@
             "detail": "电脑端别踩白块游戏"
         },
         {
-            "type": "process",
+            "type": "shell",
             "label": "Don't Tap White Block",
             "command": "make",
             "args": ["dont_tap_white_block"],
@@ -145,7 +145,7 @@
             "detail": "别踩白块"
         },
         {
-            "type": "process",
+            "type": "shell",
             "label": "opencv",
             "command": "g++",
             "args": [
@@ -189,7 +189,7 @@
             "detail": "使用 OpenCV"
         },
         {
-            "type": "process",
+            "type": "shell",
             "label": "clean",
             "command": "make",
             "args": [
@@ -206,6 +206,25 @@
                 "isDefault": true
             },
             "detail": "清理中间文件"
+        },
+        {
+            "type": "shell",
+            "label": "test timer",
+            "command": "make",
+            "args": [
+                "test_timer"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "detail": "测试计时器"
         },
     ],
     "version": "2.0.0"

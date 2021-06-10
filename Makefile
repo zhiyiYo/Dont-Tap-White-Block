@@ -10,8 +10,9 @@ screenshot_obj = test_screenshot.o Screenshot.o
 block_detector_obj = test_block_detector.o BlockDetector.o
 screen_detector_obj = test_screen_detector.o ScreenDetector.o
 io_utils_obj = test_io_utils.o IOUtils.o
+timer_obj = test_timer.o Timer.o
 pc_game_obj = pc_game.o BlockDetector.o Screenshot.o IOUtils.o
-main_obj = main.o Serial.o BlockDetector.o ScreenDetector.o
+main_obj = main.o Timer.o Serial.o BlockDetector.o ScreenDetector.o
 
 
 vpath %.cpp src
@@ -41,14 +42,20 @@ test_serial: $(serial_obj)
 test_io_utils: $(io_utils_obj)
 	$(cxx) -o build/$@ $(io_utils_obj)
 
+test_timer: $(timer_obj)
+	$(cxx) -o build/$@ $(timer_obj)
 
+
+Timer.o: Timer.h
 Serial.o: Serial.h
 IOUtils.o: IOUtils.h
 Screenshot.o: Screenshot.h
 BlockDetector.o: BlockDetector.h
 
-main.o: Serial.h BlockDetector.h ScreenDetector.h
+main.o: Serial.h Timer.h BlockDetector.h ScreenDetector.h
 pc_game.o: IOUtils.h BlockDetector.h Screenshot.h
+
+test_timer.o: Timer.h
 test_serial.o: Serial.h
 test_io_utils.o: IOUtils.h
 test_screenshot.o: Screenshot.h
@@ -56,7 +63,6 @@ test_block_detector.o: BlockDetector.h
 test_screen_detector.o: BlockDetector.h
 test_motor.o: Serial.h BlockDetector.h
 
-
 .PHONY: clean
 clean:
-	del $(serial_obj) $(block_detector_obj) $(screenshot_obj) $(io_utils_obj) $(pc_game_obj) $(screen_detector_obj) $(main_obj)
+	del $(serial_obj) $(block_detector_obj) $(screenshot_obj) $(io_utils_obj) $(pc_game_obj) $(screen_detector_obj) $(main_obj) $(timer_obj)

@@ -8,7 +8,7 @@
             "name": "Don't Tap White Block (Launch)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/dont_tap_while_block.exe",
+            "program": "${workspaceFolder}/build/dont_tap_white_block.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -26,7 +26,7 @@
             "preLaunchTask": "Don't Tap White Block",
         },
         {
-            "name": "test PC game (Launch)",
+            "name": "PC game (Launch)",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/test_pc_game.exe",
@@ -44,7 +44,28 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "test PC game",
+            "preLaunchTask": "PC game",
+        },
+        {
+            "name": "test serial (Launch)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/test_serial.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "D:/MinGW/mingw64/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "test serial",
         },
         {
             "name": "test block detector (Launch)",
@@ -87,27 +108,6 @@
                 }
             ],
             "preLaunchTask": "test screen detector",
-        },
-        {
-            "name": "test serial (Launch)",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/build/test_serial.exe",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "miDebuggerPath": "D:/MinGW/mingw64/bin/gdb.exe",
-            "setupCommands": [
-                {
-                    "description": "为 gdb 启用整齐打印",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ],
-            "preLaunchTask": "test serial",
         },
         {
             "name": "test motor (Launch)",
@@ -173,6 +173,27 @@
             "preLaunchTask": "test IOUtils",
         },
         {
+            "name": "test timer (Launch)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/test_timer.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "D:/MinGW/mingw64/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "test timer",
+        },
+        {
             "name": "opencv (Launch)",
             "type": "cppdbg",
             "request": "launch",
@@ -193,5 +214,6 @@
             ],
             "preLaunchTask": "opencv",
         },
+
     ]
 }

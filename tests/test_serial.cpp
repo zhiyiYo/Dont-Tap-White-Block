@@ -11,7 +11,8 @@ int main(int argc, char const *argv[])
     int port = argc == 1 ? 8 : atoi(argv[1]);
     if (!serial.initPort(port, 9600, 8, 1, 0))
         cout << "Open COM" << port << " wrong!" << endl;
-
+    if (!serial.openThread())
+        cout << "监听线程打开失败" << endl;
     // 循环发送数据同时监听串口缓冲区
     int count = 0;
     while (1)
