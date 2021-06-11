@@ -16,6 +16,13 @@ void Timer::stop()
     m_isRunning = false;
 }
 
+/* 重新打开计时器 */
+void Timer::restart()
+{
+    stop();
+    start();
+}
+
 /* 判断计时器是否正在运行 */
 bool Timer::isRunning() const
 {

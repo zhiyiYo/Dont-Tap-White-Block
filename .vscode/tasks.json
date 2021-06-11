@@ -2,9 +2,34 @@
     "tasks": [
         {
             "type": "shell",
+            "label": "Don't Tap White Block",
+            "command": "make",
+            "args": [
+                "dont_tap_white_block"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            // 运行生成任务
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "close": true
+            },
+            "detail": "别踩白块"
+        },
+        {
+            "type": "shell",
             "label": "test serial",
             "command": "make",
-            "args": ["test_serial"],
+            "args": [
+                "test_serial"
+            ],
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -22,7 +47,9 @@
             "type": "shell",
             "label": "test block detector",
             "command": "make",
-            "args": ["test_block_detector"],
+            "args": [
+                "test_block_detector"
+            ],
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -40,7 +67,9 @@
             "type": "shell",
             "label": "test screen detector",
             "command": "make",
-            "args": ["test_screen_detector"],
+            "args": [
+                "test_screen_detector"
+            ],
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -58,7 +87,9 @@
             "type": "shell",
             "label": "test motor",
             "command": "make",
-            "args": ["test_motor"],
+            "args": [
+                "test_motor"
+            ],
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -76,7 +107,9 @@
             "type": "shell",
             "label": "test screenshot",
             "command": "make",
-            "args": ["test_screenshot"],
+            "args": [
+                "test_screenshot"
+            ],
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -94,7 +127,9 @@
             "type": "shell",
             "label": "test IOUtils",
             "command": "make",
-            "args": ["test_io_utils"],
+            "args": [
+                "test_io_utils"
+            ],
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -112,7 +147,9 @@
             "type": "shell",
             "label": "PC game",
             "command": "make",
-            "args": ["pc_game"],
+            "args": [
+                "pc_game"
+            ],
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -125,24 +162,6 @@
                 "isDefault": true
             },
             "detail": "电脑端别踩白块游戏"
-        },
-        {
-            "type": "shell",
-            "label": "Don't Tap White Block",
-            "command": "make",
-            "args": ["dont_tap_white_block"],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            // 运行生成任务
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "detail": "别踩白块"
         },
         {
             "type": "shell",

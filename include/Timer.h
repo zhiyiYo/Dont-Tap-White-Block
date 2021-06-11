@@ -8,6 +8,7 @@ public:
     int64_t getDuration();
     void start();
     void stop();
+    void restart();
     bool isRunning() const;
 
 private:

@@ -1,14 +1,15 @@
-#include "Timer.h"
 #include "Serial.h"
+#include "StateMachine.h"
 #include "BlockDetector.h"
 #include "ScreenDetector.h"
 #define CAMERA_WINDOW "camera"
 #define GAME_WINDOW "game"
 
+int seqNumbers[4] = {0, 0, 0, 0};
+
 void on_playChanged(int isPlaying, void *userData);
-void updateClickState(Serial &s0, Serial &s1, bool &isClickDone);
-void updateClickState(Serial &s0, Serial &s1, bool *isClickDones, Timer *timers);
-Timer timers[4];
+void resetStateMachines(StateMachine *stateMachines, int *seqNumbers);
+void updateClickState(Serial &s0, Serial &s1, StateMachine *stateMachines, int *seqNumbers);
 
 int main(int argc, char const *argv[])
 {
@@ -38,14 +39,21 @@ int main(int argc, char const *argv[])
         return -1;
     };
 
+    // 创建有限状态机和确认号
+    StateMachine stateMachines[4] = {
+        StateMachine(0, &serial_0, 400),
+        StateMachine(1, &serial_0, 400),
+        StateMachine(2, &serial_1, 400),
+        StateMachine(3, &serial_1, 400),
+    };
+
+    // 初始化状态机
+    resetStateMachines(stateMachines, seqNumbers);
+
     // 创建图窗
     cv::namedWindow(CAMERA_WINDOW);
     cv::namedWindow(GAME_WINDOW);
-    cv::createTrackbar("Play game", CAMERA_WINDOW, &isPlaying, 1, on_playChanged, NULL);
-
-    // 敲击是否结束标志位
-    // bool isClickDone = true;
-    bool isClickDones[4] = {true, true, true, true};
+    cv::createTrackbar("Play game", CAMERA_WINDOW, &isPlaying, 1, on_playChanged, static_cast<void *>(stateMachines));
 
     // 读入摄像头的拍摄内容
     while (1)
@@ -68,33 +76,24 @@ int main(int argc, char const *argv[])
         // 游戏开始
         if (isPlaying)
         {
-            // 寻找黑块
+            // 寻找黑块并绘制轮廓线
             int column = blockDetector.findBlackBlock(gameImage, 180, gameRegion.area() / 8, cv::Size(2, 2));
-            // 绘制黑块轮廓线
             cv::rectangle(gameImage, blockDetector.getBlockRect(), cv::Scalar(0, 0, 255), 2);
-            if (column >= 0 && isClickDones[column])
-            {
-                // 发送敲击命令
-                char col = '0' + column;
-                if (col == '0' || col == '1')
-                    serial_0.writeData(&col, 1);
-                else
-                    serial_1.writeData(&col, 1);
+            // 没有找到黑块时发送无效指令
+            char msg = column >= 0 ? column + seqNumbers[column] * 4 + '0' : '\0';
 
-                // 在敲击完成前禁止继续敲击并打开计时器
-                // isClickDone = false;
-                isClickDones[column] = false;
-                timers[column].start();
-            }
+            // 状态转移
+            for (int i = 0; i < 4; ++i)
+                stateMachines[i].transition(msg, StateMachine::MessageType::COMMAND);
 
-            // 检查敲击是否完成
-            updateClickState(serial_0, serial_1, isClickDones, timers);
+            // 检查是否收到回复消息
+            updateClickState(serial_0, serial_1, stateMachines, seqNumbers);
         }
 
         // 显示图像
         cv::imshow(CAMERA_WINDOW, cameraImage);
         cv::imshow(GAME_WINDOW, screenImage);
-        cv::waitKey(30);
+        cv::waitKey(15);
     }
 
     return 0;
@@ -109,41 +108,37 @@ void on_playChanged(int isPlaying, void *userData)
     else
     {
         std::cout << "⏺  游戏暂停" << std::endl;
-        // 关掉计时器
-        for (int i = 0; i < 4; ++i)
-            timers[i].stop();
+        // 重置状态机
+        resetStateMachines(static_cast<StateMachine *>(userData), seqNumbers);
     }
 }
 
-/** @brief 根据串口消息更新电机点击状态
+/** @brief 根据串口消息更新各个状态机的状态
  * @param s0 串口 0
  * @param s1 串口 1
- * @param isClickDone 电机点击状态
+ * @param stateMachines 有限状态机数组
+ * @param seqNumbers 确认号数组
  */
-void updateClickState(Serial &s0, Serial &s1, bool &isClickDone)
+void updateClickState(Serial &s0, Serial &s1, StateMachine *stateMachines, int *seqNumbers)
 {
     std::string col = s0.readData() + s1.readData();
-    if (!col.empty())
-        isClickDone = true;
+    char msg[] = "01234567";
+    for (int i = 0; i < 8; ++i)
+        if (col.find(msg[i]) != col.npos)
+        {
+            // 更新状态机，如果成功发生状态转移（有时会收到延迟到来的重复的确认包），就前滚确认号
+            int j = i < 4 ? i : i - 4;
+            if (stateMachines[j].transition(msg[i], StateMachine::MessageType::ACK))
+                seqNumbers[j] = (seqNumbers[j] + 1) % 2;
+        }
 }
 
-/** @brief 根据串口消息更新各个电机点击状态
- * @param s0 串口 0
- * @param s1 串口 1
- * @param isClickDones 电机点击状态数组
- * @param timers 计时器数组
- */
-void updateClickState(Serial &s0, Serial &s1, bool *isClickDones, Timer *timers)
+/* 重置所有状态机 */
+void resetStateMachines(StateMachine *stateMachines, int *seqNumbers)
 {
-    std::string col = s0.readData() + s1.readData();
-    char nums[] = "0123";
     for (int i = 0; i < 4; ++i)
     {
-        // 如果接收到点击完成信号或者计时器溢出，就将对应的电机解锁
-        if (col.find(nums[i]) != col.npos || timers[i].getDuration() > 300)
-        {
-            isClickDones[i] = true;
-            timers[i].stop();
-        }
+        stateMachines[i].reset();
+        seqNumbers[i] = 0;
     }
 }

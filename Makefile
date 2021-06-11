@@ -12,7 +12,7 @@ screen_detector_obj = test_screen_detector.o ScreenDetector.o
 io_utils_obj = test_io_utils.o IOUtils.o
 timer_obj = test_timer.o Timer.o
 pc_game_obj = pc_game.o BlockDetector.o Screenshot.o IOUtils.o
-main_obj = main.o Timer.o Serial.o BlockDetector.o ScreenDetector.o
+main_obj = main.o Timer.o Serial.o BlockDetector.o ScreenDetector.o StateMachine.o
 
 
 vpath %.cpp src
@@ -50,9 +50,10 @@ Timer.o: Timer.h
 Serial.o: Serial.h
 IOUtils.o: IOUtils.h
 Screenshot.o: Screenshot.h
+StateMachine.o: StateMachine.h
 BlockDetector.o: BlockDetector.h
 
-main.o: Serial.h Timer.h BlockDetector.h ScreenDetector.h
+main.o: Serial.h Timer.h BlockDetector.h ScreenDetector.h StateMachine.h
 pc_game.o: IOUtils.h BlockDetector.h Screenshot.h
 
 test_timer.o: Timer.h

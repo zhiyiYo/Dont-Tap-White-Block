@@ -1,14 +1,14 @@
-#include <Stepper.h>
-#include <SoftwareSerial.h>
+#include "StateMachine.h"
 
-int stepperNum;
-int steps = 5;
-int pressDelay = 85;
-int releaseDelay = 20;
+int steps = 4;
+int pressDelay = 60;
+int releaseDelay = 50;
 int stepperSpeed = 100;
 SoftwareSerial softSerial(2, 3);
 Stepper stepper_0(200, 4, 5, 6, 7);
 Stepper stepper_1(200, 8, 9, 10, 11);
+StateMachine stateMachine_0(0, &stepper_0, &softSerial);
+StateMachine stateMachine_1(1, &stepper_1, &softSerial);
 
 void setup()
 {
@@ -21,22 +21,15 @@ void loop()
 {
     if (softSerial.available())
     {
-        stepperNum = softSerial.read() - '0';
-        if (stepperNum == 0)
+        char msg = softSerial.read();
+        if (msg == '0' || msg == '4')
+            stateMachine_0.transition(msg, steps, pressDelay, releaseDelay);
+        else if (msg == '1' || msg == '5')
+            stateMachine_1.transition(msg, steps - 2, pressDelay, releaseDelay);
+        else if (msg == 'r')
         {
-            stepper_0.step(-steps);
-            delay(pressDelay);
-            stepper_0.step(steps);
-            delay(releaseDelay);
-            softSerial.print('0');
-        }
-        else if (stepperNum == 1)
-        {
-            stepper_1.step(-steps + 1);
-            delay(pressDelay);
-            stepper_1.step(steps - 1);
-            delay(releaseDelay);
-            softSerial.print('1');
+            stateMachine_0.reset();
+            stateMachine_1.reset();
         }
     }
 }
