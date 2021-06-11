@@ -25,6 +25,26 @@
         },
         {
             "type": "shell",
+            "label": "PC game",
+            "command": "make",
+            "args": [
+                "pc_game"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            // 运行生成任务
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "电脑端别踩白块游戏"
+        },
+        {
+            "type": "shell",
             "label": "test serial",
             "command": "make",
             "args": [
@@ -145,26 +165,6 @@
         },
         {
             "type": "shell",
-            "label": "PC game",
-            "command": "make",
-            "args": [
-                "pc_game"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            // 运行生成任务
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "detail": "电脑端别踩白块游戏"
-        },
-        {
-            "type": "shell",
             "label": "opencv",
             "command": "g++",
             "args": [
@@ -224,7 +224,10 @@
                 "kind": "test",
                 "isDefault": true
             },
-            "detail": "清理中间文件"
+            "detail": "清理中间文件",
+            "presentation": {
+                "close": true
+            }
         },
         {
             "type": "shell",
