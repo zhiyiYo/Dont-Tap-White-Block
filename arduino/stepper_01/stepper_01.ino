@@ -1,7 +1,7 @@
 #include "StateMachine.h"
 
 int steps = 4;
-int pressDelay = 60;
+int pressDelay = 50;
 int releaseDelay = 50;
 int stepperSpeed = 100;
 SoftwareSerial softSerial(2, 3);

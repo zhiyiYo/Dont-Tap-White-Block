@@ -56,7 +56,7 @@ bool StateMachine::transition(char msg, MessageType msgType)
             // 定时器溢出就重传指令
             m_pSerial->writeData(&m_seq_0, 1);
             m_timer.restart();
-            printf("重传指令 %c\n", msg);
+            // printf("重传指令 %c\n", msg);
         }
         break;
     case State::WAIT_COMMAND_1:
@@ -81,7 +81,7 @@ bool StateMachine::transition(char msg, MessageType msgType)
         {
             m_pSerial->writeData(&m_seq_1, 1);
             m_timer.restart();
-            printf("重传指令 %c\n", msg);
+            // printf("重传指令 %c\n", msg);
         }
         break;
     default:

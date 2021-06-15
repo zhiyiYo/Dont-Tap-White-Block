@@ -2,12 +2,15 @@
 A physical plug-in of game "*Don't Tap White Block*" based on OpenCV and Arduino Uno R3.
 
 ## Hardware
+### Hardware inventory
 * USB camera × 1
 * Arduino Uno R3 × 2
 * L298N driving board × 4
 * 12v1a power adapter × 4
 * HC-05 Bluetooth module × 2
 * 42BYGH34S stepper motor × 4
+### Minimum hardware connection
+![最小硬件连接](resource/images/最小硬件连接.png)
 
 ## Mobile game
 ### Start game
@@ -27,7 +30,7 @@ make pc_game
 ### Screenshot
 ![电脑游戏截图](resource/screenshot/电脑游戏截图.png)
 
-## Note
+## Notes
 1. Your OpenCV bin folder path and include folder path may be different from mine, so please change `opencv_include_dir` and `opencv_bin_dir` in Makefile to your folder path before make.
 2. Your two Bluetooth COM numbers may be different from mine, please check COM number for HC-05 through **Control panel -> View devices and printers**. Then you can specify two COM numbers with the following code, where COM1 and COM2 are serial port numbers of two HC-05 respectively.
     ```shell
